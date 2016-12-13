@@ -16,6 +16,8 @@ trainer.extend(GlaphPlot(('main/accuracy', 'validation/main/accuracy'),
 
 ```
 
+![](./accuracy.png)
+
 複数使用することもできます。
 
 ```python
