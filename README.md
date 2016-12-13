@@ -1,60 +1,65 @@
-# GraphPlot
+# GraphReport
 
-学習曲線などのグラフをプロットしてくれるchainerのTrainer向けExtensionです。
+[Chainer](https://github.com/pfnet/chainer) extension module to output some graph such as learning-curve.
 
-## 使用例
+## Usage
 
-#### 学習曲線を描く
-
-```python
-
-# setup trainer
-
-trainer.extend(GlaphPlot(('main/accuracy', 'validation/main/accuracy'), 
-                         ylim=(0, 1),
-                         trigger=(100, 'iteration'), file_name='accuracy.png'))
-
-```
-
-![](./accuracy.png)
-
-複数使用することもできます。
+### Minimal code
 
 ```python
-
-# setup trainer
-
-trainer.extend(GlaphPlot(('main/accuracy', 'validation/main/accuracy'), 
-                         ylim=(0, 1),
-                         trigger=(100, 'iteration'), file_name='accuracy.png'))
-trainer.extend(GlaphPlot(('main/loss', 'validation/main/loss'), 
-                         ylim=(0, 10),
-                         trigger=(100, 'iteration'), file_name='loss.png'))
-
+trainer.extend(GraphReport('main/accuracy'))
 ```
 
-## 引数
+![](./images/ex1.png)
+
+### Customize graph
+
+With using `postprocess` parameter, you can customize the graph.
 
 ```python
-GraphPlot(y_keys, x_key='iteration', trigger=(1, 'epoch'), xlim=None, ylim=None, file_name='graph.png')
+def postprocess(figure, axes, summary):
+    axes.set_xlabel('iteration')
+    axes.set_ylabel('accuracy')
+    axes.set_ylim((0, 1))
+    axes.legend(loc='best')
+
+trainer.extend(GraphReport(('main/accuracy', 'validation/main/accuracy'), 
+                           trigger=(100, 'iteration'), 
+                           postprocess=postprocess,
+                           file_name='accuracy.png'))
 ```
 
-- `y_keys`
+![](./images/ex2.png)
 
-    y軸にプロットする値。str、またはstrのタプルで複数指定も可能
+## Parameter
+
+```python
+GraphReport(y_keys, x_key='iteration', trigger=(1, 'epoch'), 
+            postprocess=None, file_name='graph.png')
+```
+
+### `y_keys (str or tuple of str)`
+
+The value regarded as y axis.
     
-- `x_key`
+### `x_key (str)`
 
-    x軸にプロットする値。デフォルトは `iteration`
+The value regarded as x axis.
     
-- `xlim`
+### `trigger (tuple)`
 
-    x軸の値の範囲。未指定の場合はデータに応じて自動的に設定される。
+Trigger that decides when to aggregate the result and output the values.
     
-- `ylim`
+### `postprocess (Callable)`
 
-    y軸の値の範囲。未指定の場合はデータに応じて自動的に設定される。
+You can specify a callback function to customize the figure. This callback function receive 3 paramters.
     
-- `file_name`
+|name|type|
+|---|---|
+|figure|[matplotlib.Figure](http://matplotlib.org/api/figure_api.html)|
+|axes|[matplotlib.Axes](http://matplotlib.org/api/axes_api.html)|
+|summary|dict|
+    
+### `file_name (str)`
 
-    出力ファイル名。 `trainer` の `out` ディレクトリ内部に出力されます。
+The output file name.
