@@ -1,6 +1,6 @@
 # GraphReport
 
-[Chainer](https://github.com/pfnet/chainer) extension module to output some graph such as learning-curve.
+[Chainer](https://github.com/pfnet/chainer) extension module to output graph such as learning-curve.
 
 ## Usage
 
@@ -14,7 +14,7 @@ trainer.extend(GraphReport('main/accuracy'))
 
 ### Customize graph
 
-With using `postprocess` parameter, you can customize the graph.
+With using `postprocess` argument, you can customize the graph.
 
 ```python
 def postprocess(figure, axes, summary):
