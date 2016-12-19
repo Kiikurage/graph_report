@@ -34,8 +34,7 @@ trainer.extend(GraphReport(('main/accuracy', 'validation/main/accuracy'),
 ## Parameter
 
 ```python
-GraphReport(y_keys, x_key='iteration', trigger=(1, 'epoch'), 
-            postprocess=None, file_name='graph.png')
+GraphReport(y_keys, x_key='iteration', trigger=(1, 'epoch'), postprocess=None, file_name='graph.png')
 ```
 
 ### `y_keys (str or tuple of str)`
